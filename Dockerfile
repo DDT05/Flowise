@@ -30,8 +30,3 @@ RUN pnpm build
 EXPOSE 3000
 
 CMD [ "pnpm", "start" ]
-
-# Ollama server setup
-FROM ollama/ollama
-ENV OLLAMA_HOST "0.0.0.0"
-EXPOSE 11434
