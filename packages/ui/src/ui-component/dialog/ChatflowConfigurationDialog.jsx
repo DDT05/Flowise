@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import { Box, Dialog, DialogContent, DialogTitle, Tabs, Tab } from '@mui/material'
 import { tabsClasses } from '@mui/material/Tabs'
 import SpeechToText from '@/ui-component/extended/SpeechToText'
+import TextToSpeech from '@/ui-component/extended/TextToSpeech'
 import Security from '@/ui-component/extended/Security'
 import ChatFeedback from '@/ui-component/extended/ChatFeedback'
 import AnalyseFlow from '@/ui-component/extended/AnalyseFlow'
@@ -11,6 +12,7 @@ import StarterPrompts from '@/ui-component/extended/StarterPrompts'
 import Leads from '@/ui-component/extended/Leads'
 import FollowUpPrompts from '@/ui-component/extended/FollowUpPrompts'
 import FileUpload from '@/ui-component/extended/FileUpload'
+import PostProcessing from '@/ui-component/extended/PostProcessing'
 
 const CHATFLOW_CONFIGURATION_TABS = [
     {
@@ -30,6 +32,10 @@ const CHATFLOW_CONFIGURATION_TABS = [
         id: 'speechToText'
     },
     {
+        label: 'Text to Speech',
+        id: 'textToSpeech'
+    },
+    {
         label: 'Chat Feedback',
         id: 'chatFeedback'
     },
@@ -44,6 +50,11 @@ const CHATFLOW_CONFIGURATION_TABS = [
     {
         label: 'File Upload',
         id: 'fileUpload'
+    },
+    {
+        label: 'Post Processing',
+        id: 'postProcessing',
+        hideInAgentFlow: true
     }
 ]
 
@@ -76,9 +87,11 @@ function a11yProps(index) {
     }
 }
 
-const ChatflowConfigurationDialog = ({ show, dialogProps, onCancel }) => {
+const ChatflowConfigurationDialog = ({ show, isAgentCanvas, dialogProps, onCancel }) => {
     const portalElement = document.getElementById('portal')
     const [tabValue, setTabValue] = useState(0)
+
+    const filteredTabs = CHATFLOW_CONFIGURATION_TABS.filter((tab) => !isAgentCanvas || !tab.hideInAgentFlow)
 
     const component = show ? (
         <Dialog
@@ -108,7 +121,7 @@ const ChatflowConfigurationDialog = ({ show, dialogProps, onCancel }) => {
                     variant='scrollable'
                     scrollButtons='auto'
                 >
-                    {CHATFLOW_CONFIGURATION_TABS.map((item, index) => (
+                    {filteredTabs.map((item, index) => (
                         <Tab
                             sx={{
                                 minHeight: '40px',
@@ -117,22 +130,24 @@ const ChatflowConfigurationDialog = ({ show, dialogProps, onCancel }) => {
                                 alignItems: 'center',
                                 mb: 1
                             }}
-                            key={index}
+                            key={item.id}
                             label={item.label}
                             {...a11yProps(index)}
                         ></Tab>
                     ))}
                 </Tabs>
-                {CHATFLOW_CONFIGURATION_TABS.map((item, index) => (
-                    <TabPanel key={index} value={tabValue} index={index}>
+                {filteredTabs.map((item, index) => (
+                    <TabPanel key={item.id} value={tabValue} index={index}>
                         {item.id === 'security' && <Security dialogProps={dialogProps} />}
                         {item.id === 'conversationStarters' ? <StarterPrompts dialogProps={dialogProps} /> : null}
                         {item.id === 'followUpPrompts' ? <FollowUpPrompts dialogProps={dialogProps} /> : null}
                         {item.id === 'speechToText' ? <SpeechToText dialogProps={dialogProps} /> : null}
+                        {item.id === 'textToSpeech' ? <TextToSpeech dialogProps={dialogProps} /> : null}
                         {item.id === 'chatFeedback' ? <ChatFeedback dialogProps={dialogProps} /> : null}
                         {item.id === 'analyseChatflow' ? <AnalyseFlow dialogProps={dialogProps} /> : null}
                         {item.id === 'leads' ? <Leads dialogProps={dialogProps} /> : null}
                         {item.id === 'fileUpload' ? <FileUpload dialogProps={dialogProps} /> : null}
+                        {item.id === 'postProcessing' ? <PostProcessing dialogProps={dialogProps} /> : null}
                     </TabPanel>
                 ))}
             </DialogContent>
@@ -144,6 +159,7 @@ const ChatflowConfigurationDialog = ({ show, dialogProps, onCancel }) => {
 
 ChatflowConfigurationDialog.propTypes = {
     show: PropTypes.bool,
+    isAgentCanvas: PropTypes.bool,
     dialogProps: PropTypes.object,
     onCancel: PropTypes.func
 }

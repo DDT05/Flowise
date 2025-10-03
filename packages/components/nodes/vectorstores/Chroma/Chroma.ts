@@ -74,7 +74,8 @@ class Chroma_VectorStores implements INode {
                 name: 'chromaMetadataFilter',
                 type: 'json',
                 optional: true,
-                additionalParams: true
+                additionalParams: true,
+                acceptVariable: true
             },
             {
                 label: 'Top K',
@@ -213,7 +214,6 @@ class Chroma_VectorStores implements INode {
         const chromaApiKey = getCredentialParam('chromaApiKey', credentialData, nodeData)
         const chromaTenant = getCredentialParam('chromaTenant', credentialData, nodeData)
         const chromaDatabase = getCredentialParam('chromaDatabase', credentialData, nodeData)
-
         const chromaMetadataFilter = nodeData.inputs?.chromaMetadataFilter
 
         const obj: {
