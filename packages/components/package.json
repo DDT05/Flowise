@@ -115,7 +115,7 @@
         "mammoth": "^1.5.1",
         "meilisearch": "^0.41.0",
         "moment": "^2.29.3",
-        "mongodb": "6.3.0",
+        "mongodb": "^6.17.0",
         "mysql2": "^3.11.3",
         "neo4j-driver": "^5.26.0",
         "node-fetch": "^2.6.11",
@@ -143,7 +143,7 @@
         "winston": "^3.9.0",
         "ws": "^8.18.0",
         "xlsx": "0.18.5",
-        "zod": "3.22.4",
+        "zod": "^3.23.8",
         "zod-to-json-schema": "^3.21.4"
     },
     "devDependencies": {
